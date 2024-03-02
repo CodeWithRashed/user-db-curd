@@ -1,6 +1,7 @@
 "use client"
 import React, { useState } from "react";
 import { Form, Input, InputNumber, Popconfirm, Table, Typography } from "antd";
+import EmptyEmployeeTable from "./EmptyEmployeeTable";
 
 interface Item {
   key: string;
@@ -11,12 +12,12 @@ interface Item {
 
 const originData: Item[] = [];
 for (let i = 0; i < 5; i++) {
-  originData.push({
-    key: i.toString(),
-    name: `Edward ${i}`,
-    age: 32,
-    address: `London Park no. ${i}`,
-  });
+//   originData.push({
+//     key: i.toString(),
+//     name: `Edward ${i}`,
+//     age: 32,
+//     address: `London Park no. ${i}`,
+//   });
 }
 interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
   editing: boolean;
@@ -90,11 +91,11 @@ const EmployeeTable: React.FC = () => {
           ...item,
           ...row,
         });
-        setData(newData);
+        // setData(newData);
         setEditingKey("");
       } else {
         newData.push(row);
-        setData(newData);
+        // setData(newData);
         setEditingKey("");
       }
     } catch (errInfo) {
@@ -165,6 +166,12 @@ const EmployeeTable: React.FC = () => {
       }),
     };
   });
+
+  if(data){
+    return <div className="flex justify-center items-center h-full max-w-lg my-auto bg-white p-16">
+        <EmptyEmployeeTable/>
+    </div>
+  }
 
   return (
     <div className="w-full h-full">
