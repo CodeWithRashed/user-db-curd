@@ -2,25 +2,10 @@
 import React, { useState } from "react";
 import { Form, Input, InputNumber, Popconfirm, Table, Typography } from "antd";
 import EmptyEmployeeTable from "./EmptyEmployeeTable";
+import { EditableCellProps, tableItem } from "../interfaces/interfaces";
+import LoadingSpinner from "./LoadingSpinner";
 
-interface Item {
-  key: string;
-  name: string;
-  age: number;
-  isBlocked: boolean;
-  address: string;
 
-}
-
-interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
-  editing: boolean;
-  dataIndex: string;
-  title: any;
-  inputType: "number" | "text" | "boolean";
-  record: Item;
-  index: number;
-  children: React.ReactNode;
-}
 
 const EditableCell: React.FC<EditableCellProps> = ({
   editing,
@@ -60,20 +45,21 @@ const EmployeeTable: React.FC = () => {
   const [form] = Form.useForm();
   const [data, setData] = useState([]);
   const [editingKey, setEditingKey] = useState("");
+  const [isLoading, setIsLoading] = React.useState(true)
 
   const fetchData = async () => {
-    const originData: Item[] = [];
+    const originData: tableItem[] = [];
     for (let i = 0; i < 5; i++) {
       originData.push({
         key: i.toString(),
-        name: `Edward ${i}`,
-        age: 32,
+        name: `Rashed${i}`,
         isBlocked: false,
-        address: `London Park no. ${i}`,
+        email: `rashed@gmail${i}.com`,
       });
     }
 
     setData(originData);
+    setIsLoading(false)
     // try {
     //     const response = await axios.get('your-api-endpoint');
     //     setData(response.data);
@@ -82,14 +68,14 @@ const EmployeeTable: React.FC = () => {
     // }
   };
 
-  //GETTING DATA FROM DATABASE
+//GETTING DATA FROM DATABASE
   React.useEffect(() => {
     fetchData();
   }, []);
 
-  const isEditing = (record: Item) => record.key === editingKey;
+  const isEditing = (record: tableItem) => record.key === editingKey;
 
-  const edit = (record: Partial<Item> & { key: React.Key }) => {
+  const edit = (record: Partial<tableItem> & { key: React.Key }) => {
     form.setFieldsValue({ name: "", age: "", address: "", ...record });
     setEditingKey(record.key);
   };
@@ -100,17 +86,19 @@ const EmployeeTable: React.FC = () => {
 
   const save = async (key: React.Key) => {
     try {
-      const row = (await form.validateFields()) as Item;
-
+      const row = (await form.validateFields()) as tableItem;
+      const updatedItemIndex = data.findIndex((item) => key === item.key);
       const newData = [...data];
       const index = newData.findIndex((item) => key === item.key);
       if (index > -1) {
         const item = newData[index];
+
         newData.splice(index, 1, {
           ...item,
           ...row,
         });
         setData(newData);
+        console.log(newData[updatedItemIndex]);
         setEditingKey("");
       } else {
         newData.push(row);
@@ -123,12 +111,15 @@ const EmployeeTable: React.FC = () => {
   };
 
   const handleBlock = (key: React.Key) => {
-    const newData = data.map(item => {
+    const newData = data.map((item) => {
       if (item.key === key) {
+        console.log("blocked item", item)
         return { ...item, isBlocked: !item.isBlocked };
       }
+     
       return item;
     });
+
     setData(newData);
   };
 
@@ -136,9 +127,6 @@ const EmployeeTable: React.FC = () => {
     const newData = data.filter((item) => item.key !== key);
     setData(newData);
   };
-
-
-
 
   const columns = [
     {
@@ -148,21 +136,15 @@ const EmployeeTable: React.FC = () => {
       editable: true,
     },
     {
-      title: "age",
-      dataIndex: "age",
-      width: "15%",
-      editable: true,
-    },
-    {
-      title: "address",
-      dataIndex: "address",
+      title: "email",
+      dataIndex: "email",
       width: "40%",
-      editable: true,
+      editable: false,
     },
     {
       title: "operation",
       dataIndex: "operation",
-      render: (_: any, record: Item) => {
+      render: (_: any, record: tableItem) => {
         const editable = isEditing(record);
         return editable ? (
           <span>
@@ -179,16 +161,16 @@ const EmployeeTable: React.FC = () => {
         ) : (
           <div>
             <span className="edit-button">
-            <Typography.Link
-              disabled={editingKey !== ""}
-              onClick={() => edit(record)}
-            >
-              Edit
-            </Typography.Link>
+              <Typography.Link
+                disabled={editingKey !== ""}
+                onClick={() => edit(record)}
+              >
+                Edit
+              </Typography.Link>
             </span>
             <span className="block-button ml-3">
               <Popconfirm
-                title="Sure to block?"
+                title={`Sure to ${record.isBlocked ? "unblock" : "block"}?`}
                 onConfirm={() => handleBlock(record.key)}
                 okText="Yes"
                 cancelText="No"
@@ -222,7 +204,7 @@ const EmployeeTable: React.FC = () => {
     }
     return {
       ...col,
-      onCell: (record: Item) => ({
+      onCell: (record: tableItem) => ({
         record,
         inputType: col.dataIndex === "age" ? "number" : "text",
         dataIndex: col.dataIndex,
@@ -232,6 +214,9 @@ const EmployeeTable: React.FC = () => {
     };
   });
 
+if(isLoading){
+  return <div className="w-full h-full m-auto"><LoadingSpinner/></div>
+}
   if (!data) {
     return (
       <div className="flex justify-center items-center h-full w-full my-auto">
