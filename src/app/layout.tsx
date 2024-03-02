@@ -1,6 +1,7 @@
-import './globals.css'
-import { AntdRegistry } from '@ant-design/nextjs-registry';
-import { Toaster } from 'react-hot-toast';
+import "./globals.css";
+import { AntdRegistry } from "@ant-design/nextjs-registry";
+import { Toaster } from "react-hot-toast";
+import { DataContextProvider } from "../Context/GlobalDataContext";
 export default function RootLayout({
   children,
 }: {
@@ -9,11 +10,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Toaster/>
-        <AntdRegistry>
-        {children}
-        </AntdRegistry>
-        </body>
+        <Toaster />
+        <DataContextProvider>
+          <AntdRegistry>{children}</AntdRegistry>
+        </DataContextProvider>
+      </body>
     </html>
   );
 }

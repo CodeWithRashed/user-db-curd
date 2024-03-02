@@ -1,8 +1,9 @@
 export interface tableItem {
     key: string;
     name: string;
-    isBlocked: boolean;
     email: string;
+    phone: string;
+    isBlocked: boolean;
   }
   
 

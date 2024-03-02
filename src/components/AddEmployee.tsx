@@ -1,6 +1,11 @@
+"use client"
+
+import { useGlobalDataContext } from "../Context/GlobalDataContext";
 
 
 const AddEmployee = () => {
+  const {testData} = useGlobalDataContext()
+  console.log(testData)
   return (
     <div className="max-w-xs lg:w-96 bg-white mx-auto rounded-md my-auto">
       <form className="shadow-md rounded p-4 md:p-8 lg:p-14">

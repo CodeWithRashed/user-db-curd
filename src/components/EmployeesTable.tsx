@@ -52,8 +52,9 @@ const EmployeeTable: React.FC = () => {
       originData.push({
         key: i.toString(),
         name: `Rashed${i}`,
-        isBlocked: false,
         email: `rashed@gmail${i}.com`,
+        phone: `${i}123456789`,
+        isBlocked: false,
       });
     }
 
@@ -140,9 +141,16 @@ const EmployeeTable: React.FC = () => {
     {
       title: "email",
       dataIndex: "email",
-      width: "40%",
+      width: "30%",
       editable: false,
     },
+    {
+      title: "phone",
+      dataIndex: "phone",
+      width: "25%",
+      editable: true,
+    },
+    
     {
       title: "operation",
       dataIndex: "operation",
