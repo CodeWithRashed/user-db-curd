@@ -2,7 +2,7 @@
 
 const AddEmployee = () => {
   return (
-    <div className="max-w-xs lg:w-96 bg-white mx-auto rounded-md">
+    <div className="max-w-xs lg:w-96 bg-white mx-auto rounded-md my-auto">
       <form className="shadow-md rounded p-4 md:p-8 lg:p-14">
         <div className="mb-4">
           <label

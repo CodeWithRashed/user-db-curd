@@ -6,6 +6,7 @@ import {
 } from "@ant-design/icons";
 import { Layout, Menu, theme } from "antd";
 import AddEmployee from "./AddEmployee";
+import EmployeesTable from "./EmployeesTable";
 
 const { Content, Footer, Sider } = Layout;
 
@@ -21,18 +22,18 @@ const items = [
 const AntLayout: React.FC = () => {
 
 
-  const [displayContent, setDisplayContent] = React.useState("Main Dashboard");
+  const [displayContent, setDisplayContent] = React.useState(<EmployeesTable/>);
 
   const handleMenuChange = (key) => {
     switch (key) {
       case "1":
         console.log("key1");
-        setDisplayContent("Main Dashboard");
+        setDisplayContent(<EmployeesTable/>);
         return;
 
       case "2":
         console.log("key2");
-        setDisplayContent("Add User");
+        setDisplayContent(<AddEmployee/>);
         return;
       default:
         break;
@@ -70,11 +71,9 @@ const AntLayout: React.FC = () => {
               background: "transparent",
               display: "flex",
               justifyContent: "center",
-              alignItems: "center",
             }}
           >
-            <AddEmployee/>
-            {/* {displayContent} */}
+            {displayContent}
           </div>
         </Content>
         <Footer style={{ textAlign: "center" }}>
