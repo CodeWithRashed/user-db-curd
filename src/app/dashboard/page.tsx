@@ -1,4 +1,10 @@
 import AntLayout from "../../components/AntLayot"
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Dashboard | Employee Management System',
+  description: 'Employee Management System App',
+}
 
 const DashboardPage = () => {
   return (
