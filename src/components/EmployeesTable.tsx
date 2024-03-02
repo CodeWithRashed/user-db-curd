@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useState } from "react";
 import { Form, Input, InputNumber, Popconfirm, Table, Typography } from "antd";
 import EmptyEmployeeTable from "./EmptyEmployeeTable";
@@ -7,23 +7,16 @@ interface Item {
   key: string;
   name: string;
   age: number;
+  isBlocked: boolean;
   address: string;
+
 }
 
-const originData: Item[] = [];
-for (let i = 0; i < 5; i++) {
-//   originData.push({
-//     key: i.toString(),
-//     name: `Edward ${i}`,
-//     age: 32,
-//     address: `London Park no. ${i}`,
-//   });
-}
 interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
   editing: boolean;
   dataIndex: string;
   title: any;
-  inputType: "number" | "text";
+  inputType: "number" | "text" | "boolean";
   record: Item;
   index: number;
   children: React.ReactNode;
@@ -65,8 +58,34 @@ const EditableCell: React.FC<EditableCellProps> = ({
 
 const EmployeeTable: React.FC = () => {
   const [form] = Form.useForm();
-  const [data, setData] = useState(originData);
+  const [data, setData] = useState([]);
   const [editingKey, setEditingKey] = useState("");
+
+  const fetchData = async () => {
+    const originData: Item[] = [];
+    for (let i = 0; i < 5; i++) {
+      originData.push({
+        key: i.toString(),
+        name: `Edward ${i}`,
+        age: 32,
+        isBlocked: false,
+        address: `London Park no. ${i}`,
+      });
+    }
+
+    setData(originData);
+    // try {
+    //     const response = await axios.get('your-api-endpoint');
+    //     setData(response.data);
+    // } catch (error) {
+    //     console.error('Error fetching data:', error);
+    // }
+  };
+
+  //GETTING DATA FROM DATABASE
+  React.useEffect(() => {
+    fetchData();
+  }, []);
 
   const isEditing = (record: Item) => record.key === editingKey;
 
@@ -91,17 +110,35 @@ const EmployeeTable: React.FC = () => {
           ...item,
           ...row,
         });
-        // setData(newData);
+        setData(newData);
         setEditingKey("");
       } else {
         newData.push(row);
-        // setData(newData);
+        setData(newData);
         setEditingKey("");
       }
     } catch (errInfo) {
       console.log("Validate Failed:", errInfo);
     }
   };
+
+  const handleBlock = (key: React.Key) => {
+    const newData = data.map(item => {
+      if (item.key === key) {
+        return { ...item, isBlocked: !item.isBlocked };
+      }
+      return item;
+    });
+    setData(newData);
+  };
+
+  const handleDelete = (key: React.Key) => {
+    const newData = data.filter((item) => item.key !== key);
+    setData(newData);
+  };
+
+
+
 
   const columns = [
     {
@@ -140,12 +177,40 @@ const EmployeeTable: React.FC = () => {
             </Popconfirm>
           </span>
         ) : (
-          <Typography.Link
-            disabled={editingKey !== ""}
-            onClick={() => edit(record)}
-          >
-            Edit
-          </Typography.Link>
+          <div>
+            <span className="edit-button">
+            <Typography.Link
+              disabled={editingKey !== ""}
+              onClick={() => edit(record)}
+            >
+              Edit
+            </Typography.Link>
+            </span>
+            <span className="block-button ml-3">
+              <Popconfirm
+                title="Sure to block?"
+                onConfirm={() => handleBlock(record.key)}
+                okText="Yes"
+                cancelText="No"
+              >
+                <Typography.Link disabled={editingKey !== ""}>
+                  {record.isBlocked ? "unblock" : "block"}
+                </Typography.Link>
+              </Popconfirm>
+            </span>
+            <span className="delete-button ml-3">
+              <Popconfirm
+                title="Sure to delete?"
+                onConfirm={() => handleDelete(record.key)}
+                okText="Yes"
+                cancelText="No"
+              >
+                <Typography.Link disabled={editingKey !== ""}>
+                  Delete
+                </Typography.Link>
+              </Popconfirm>
+            </span>
+          </div>
         );
       },
     },
@@ -167,10 +232,12 @@ const EmployeeTable: React.FC = () => {
     };
   });
 
-  if(data){
-    return <div className="flex justify-center items-center h-full max-w-lg my-auto bg-white p-16">
-        <EmptyEmployeeTable/>
-    </div>
+  if (!data) {
+    return (
+      <div className="flex justify-center items-center h-full w-full my-auto">
+        <EmptyEmployeeTable />
+      </div>
+    );
   }
 
   return (
