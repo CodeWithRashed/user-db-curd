@@ -1,25 +1,38 @@
-# Next.js + Turbopack
+# PROJECT: USER MANAGEMENT SYSTEM
+This is a user management system for asif Inc.
 
-This example allows you to get started with `next dev --turbo` quicky.
+## TECH STACK
+- NEXT JS
+- TYPESCRIPT
+- ANT DESIGN (FOR UI)
 
-## Deploy your own
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/vercel/next.js/tree/canary/examples/with-turbopack&project-name=with-turbopack&repository-name=with-turbopack)
 
-## How to use
+## HOW TO DEPLOY LOCALLY
 
-Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init), [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/), or [pnpm](https://pnpm.io) to bootstrap the example:
+To set up the project locally, follow these steps:
 
-```bash
-npx create-next-app --example with-turbopack with-turbopack-app
-```
+1. Clone the repository:
 
-```bash
-yarn create next-app --example with-turbopack with-turbopack-app
-```
+   ```bash
+   git clone https://github.com/CodeWithRashed/user-db-curd.git
+   ```
 
-```bash
-pnpm create next-app --example with-turbopack with-turbopack-app
-```
+2. Install dependencies:
 
-Deploy it to the cloud with [Vercel](https://vercel.com/new?utm_source=github&utm_medium=readme&utm_campaign=next-example) ([Documentation](https://nextjs.org/docs/deployment)).
+   ```bash
+   cd user-db-curd
+   npm install
+   ```
+
+3. Configure Environment Variables:
+
+   Create a `.env` file and add the necessary environment variables, such as API keys and database connection strings following env.example file.
+
+4. Run the development server:
+
+   ```bash
+   npm run dev
+   ```
+
+Visit `http://localhost:3000` in your browser to see the app in action.
