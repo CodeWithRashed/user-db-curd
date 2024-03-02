@@ -4,8 +4,7 @@ import { Form, Input, InputNumber, Popconfirm, Table, Typography } from "antd";
 import EmptyEmployeeTable from "./EmptyEmployeeTable";
 import { EditableCellProps, tableItem } from "../interfaces/interfaces";
 import LoadingSpinner from "./LoadingSpinner";
-
-
+import toast from "react-hot-toast";
 
 const EditableCell: React.FC<EditableCellProps> = ({
   editing,
@@ -45,7 +44,7 @@ const EmployeeTable: React.FC = () => {
   const [form] = Form.useForm();
   const [data, setData] = useState([]);
   const [editingKey, setEditingKey] = useState("");
-  const [isLoading, setIsLoading] = React.useState(true)
+  const [isLoading, setIsLoading] = React.useState(true);
 
   const fetchData = async () => {
     const originData: tableItem[] = [];
@@ -59,7 +58,7 @@ const EmployeeTable: React.FC = () => {
     }
 
     setData(originData);
-    setIsLoading(false)
+    setIsLoading(false);
     // try {
     //     const response = await axios.get('your-api-endpoint');
     //     setData(response.data);
@@ -68,7 +67,7 @@ const EmployeeTable: React.FC = () => {
     // }
   };
 
-//GETTING DATA FROM DATABASE
+  //GETTING DATA FROM DATABASE
   React.useEffect(() => {
     fetchData();
   }, []);
@@ -100,6 +99,7 @@ const EmployeeTable: React.FC = () => {
         setData(newData);
         console.log(newData[updatedItemIndex]);
         setEditingKey("");
+        toast.success("Saved Successfully!!");
       } else {
         newData.push(row);
         setData(newData);
@@ -113,19 +113,21 @@ const EmployeeTable: React.FC = () => {
   const handleBlock = (key: React.Key) => {
     const newData = data.map((item) => {
       if (item.key === key) {
-        console.log("blocked item", item)
+        console.log("blocked item", item);
         return { ...item, isBlocked: !item.isBlocked };
       }
-     
+
       return item;
     });
 
     setData(newData);
+    toast.success("Employee Blocked Successfully!!");
   };
 
   const handleDelete = (key: React.Key) => {
     const newData = data.filter((item) => item.key !== key);
     setData(newData);
+    toast.success("Employee Deleted Successfully!!");
   };
 
   const columns = [
@@ -214,9 +216,13 @@ const EmployeeTable: React.FC = () => {
     };
   });
 
-if(isLoading){
-  return <div className="w-full h-full m-auto"><LoadingSpinner/></div>
-}
+  if (isLoading) {
+    return (
+      <div className="w-full h-full m-auto">
+        <LoadingSpinner />
+      </div>
+    );
+  }
   if (!data) {
     return (
       <div className="flex justify-center items-center h-full w-full my-auto">

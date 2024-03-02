@@ -1,5 +1,6 @@
 import './globals.css'
 import { AntdRegistry } from '@ant-design/nextjs-registry';
+import { Toaster } from 'react-hot-toast';
 export default function RootLayout({
   children,
 }: {
@@ -8,6 +9,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        <Toaster/>
         <AntdRegistry>
         {children}
         </AntdRegistry>
