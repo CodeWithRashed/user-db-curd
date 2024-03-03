@@ -8,6 +8,8 @@
   "dependencies": {
     "@ant-design/nextjs-registry": "^1.0.0",
     "antd": "^5.14.2",
+    "dotenv": "^16.4.5",
+    "mongodb": "^6.4.0",
     "next": "latest",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
