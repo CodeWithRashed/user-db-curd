@@ -2,10 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import clientPromise from "../../../../db/connectToDatabase";
 
 export async function POST(request: NextRequest) {
+
     try {
+      //GETTING DATA FROM REQUEST
       const reqBody = await request.json();
-      console.log(reqBody);
-  
       const employee = {
         key: reqBody.key,
         name: reqBody.name,
@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
         isBlocked: reqBody.isBlocked,
       };
   
-      // Connect to the MongoDB database
+      //CONNECTING TO MONGO DB
       const client = await clientPromise;
       const db = client.db("employee_management");
   
@@ -23,6 +23,7 @@ export async function POST(request: NextRequest) {
         ...employee,
       };
   
+      //RETURNING 
       return NextResponse.json({ message: "Employee Created Successfully!!", newEmployee });
     } catch (err: any) {
       return NextResponse.json({ error: "Something went wrong While Creating Employee! Try Again!" });

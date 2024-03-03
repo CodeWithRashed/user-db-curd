@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import AntLayout from "../../components/AntLayout"
 import type { Metadata } from 'next'
 

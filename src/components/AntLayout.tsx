@@ -1,4 +1,5 @@
 "use client";
+export const dynamic = "force-dynamic";
 import React from "react";
 import { UserOutlined, AppstoreAddOutlined } from "@ant-design/icons";
 import { Layout, Menu } from "antd";
@@ -30,7 +31,9 @@ const AntLayout: React.FC = () => {
           console.log(collapsed, type);
         }}
       >
-        <div className="p-5 text-white">Logo</div>
+        <div className="p-4 bg-slate-700 mb-2"><h1 className="bg-gradient-to-r from-green-300 via-blue-500 to-purple-600 bg-clip-text text-3xl font-extrabold text-transparent">
+          ASIF INC
+          </h1></div>
         <Menu
           theme="dark"
           mode="inline"
@@ -56,7 +59,7 @@ const AntLayout: React.FC = () => {
           </div>
         </Content>
         <Footer style={{ textAlign: "center" }}>
-          Ant Design ©{new Date().getFullYear()} Created by Ant UED
+          Asif INC ©{new Date().getFullYear()} Created by Rashed
         </Footer>
       </Layout>
     </Layout>
