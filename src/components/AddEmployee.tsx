@@ -13,6 +13,7 @@ const AddEmployee = () => {
     event.preventDefault();
     setLoading(true);
 
+    //GETTING FORM DATA
     const form = event.target;
     const key = (data.length + 1).toString();
     const name = form.name.value;
@@ -20,6 +21,8 @@ const AddEmployee = () => {
     const phone = form.phone.value;
     const isBlocked = false;
 
+
+    //CREATING EMPLOYEE
     const employee = {
       key,
       name,
@@ -28,6 +31,8 @@ const AddEmployee = () => {
       isBlocked,
     };
 
+
+    //SAVING EMPLOYEE
     axios
       .post("/api/employee/add", employee)
       .then((response) => {

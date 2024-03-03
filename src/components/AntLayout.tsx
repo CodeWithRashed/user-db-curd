@@ -21,19 +21,12 @@ const AntLayout: React.FC = () => {
     useGlobalDataContext();
   return (
     <Layout style={{ height: "100vh" }}>
-      <Sider
-        breakpoint="lg"
-        collapsedWidth="0"
-        onBreakpoint={(broken) => {
-          console.log(broken);
-        }}
-        onCollapse={(collapsed, type) => {
-          console.log(collapsed, type);
-        }}
-      >
-        <div className="p-4 bg-slate-700 mb-2"><h1 className="bg-gradient-to-r from-green-300 via-blue-500 to-purple-600 bg-clip-text text-3xl font-extrabold text-transparent">
-          ASIF INC
-          </h1></div>
+      <Sider breakpoint="lg" collapsedWidth="0">
+        <div className="p-4 bg-slate-700 mb-2">
+          <h1 className="bg-gradient-to-r from-green-300 via-blue-500 to-purple-600 bg-clip-text text-3xl font-extrabold text-transparent">
+            ASIF INC
+          </h1>
+        </div>
         <Menu
           theme="dark"
           mode="inline"

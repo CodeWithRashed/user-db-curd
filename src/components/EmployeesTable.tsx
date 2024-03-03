@@ -11,17 +11,17 @@ import DetailsModal from "./DetailsModal";
 import axios from "axios";
 import EmptyEmployeeTable from "./EmptyEmployeeTable";
 
+// EDITABLE CELL
 const EditableCell: React.FC<EditableCellProps> = ({
   editing,
   dataIndex,
   title,
-  inputType,
   record,
   index,
   children,
   ...restProps
 }) => {
-  const inputNode = inputType === "number" ? <InputNumber /> : <Input />;
+  const inputNode = <Input />;
 
   return (
     <td {...restProps}>
@@ -45,9 +45,16 @@ const EditableCell: React.FC<EditableCellProps> = ({
   );
 };
 
+
+
+//MAIN TABLE
 const EmployeeTable: React.FC = () => {
+
+  //GETTING DATA FROM CONTEXT
   const { data, setData, isLoading, setIsModalOpen, setSelectedEmployee } =
     useGlobalDataContext();
+
+    //LOCAL STATES
   const [form] = Form.useForm();
   const [editingKey, setEditingKey] = useState("");
 
@@ -62,6 +69,8 @@ const EmployeeTable: React.FC = () => {
     setEditingKey("");
   };
 
+
+  //HANDLE SAVE
   const save = async (record: tableItem) => {
     try {
       const row = (await form.validateFields()) as tableItem;
@@ -79,7 +88,6 @@ const EmployeeTable: React.FC = () => {
         });
         axios.put(`/api/employee/put/${record._id}`, row).then(() => {
           setData(newData);
-          console.log(newData[updatedItemIndex]);
           setEditingKey("");
           toast.success("Saved Successfully!!");
         });
@@ -89,14 +97,15 @@ const EmployeeTable: React.FC = () => {
         setEditingKey("");
       }
     } catch (errInfo) {
-      console.log("Validate Failed:", errInfo);
+
     }
   };
 
+
+    //HANDLE BLOCK
   const handleBlock = (record: tableItem) => {
     const newData = data.map((item) => {
       if (item.key === record.key) {
-        console.log("blocked item", item);
         return { ...item, isBlocked: !item.isBlocked };
       }
 
@@ -111,6 +120,8 @@ const EmployeeTable: React.FC = () => {
       });
   };
 
+
+    //HANDLE DELETE
   const handleDelete = (record: tableItem) => {
     const newData = data.filter((item) => item.key !== record.key);
     setData(newData);
@@ -120,10 +131,14 @@ const EmployeeTable: React.FC = () => {
     });
   };
 
+
+    //HANDLE VIEW DETAILS
   const handleViewDetails = (record: tableItem) => {
     setSelectedEmployee(record);
     setIsModalOpen(true);
   };
+
+  //TABLE COLUMNS
   const columns = [
     {
       title: "Name",
@@ -225,6 +240,7 @@ const EmployeeTable: React.FC = () => {
     };
   });
 
+  //RETURN LOADING IF DATA IS LOADING
   if (isLoading) {
     return (
       <div className="w-full h-full m-auto">
@@ -232,6 +248,8 @@ const EmployeeTable: React.FC = () => {
       </div>
     );
   }
+
+   //RETURN EMPTY DATA COMP IF DATA IS NOT AVAILABLE
   if (!data.length) {
     return (
       <div className="flex justify-center items-center h-full w-full my-auto">
@@ -241,7 +259,7 @@ const EmployeeTable: React.FC = () => {
   }
 
   return (
-    <div className="w-full h-full overflow-x-scroll">
+    <div className="w-full h-full overflow-x-scroll lg:overflow-hidden">
       <DetailsModal />
       <div className="min-w-[500px]">
         <Form form={form} component={false}>

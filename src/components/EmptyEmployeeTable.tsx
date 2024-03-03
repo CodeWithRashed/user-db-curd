@@ -7,6 +7,7 @@ import { useGlobalDataContext } from "../Context/GlobalDataContext";
 const EmptyEmployeeTable: React.FC = () => {
   const { handleMenuChange } = useGlobalDataContext();
 
+  //IF DATA IS NOT AVAILABLE CHANGE TO ADD EMPLOYEE MENU
   const handleAddEmployeeClick = () => {
     handleMenuChange("2")
   };

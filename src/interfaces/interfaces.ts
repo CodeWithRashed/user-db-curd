@@ -19,3 +19,23 @@ export interface tableItem {
     children: React.ReactNode;
   }
   
+
+//CONTEXT API PROPS
+
+export interface DataContextProviderProps {
+  children: React.ReactNode;
+}
+export interface DataContextValue {
+  data: tableItem[];
+  isLoading: boolean;
+  setData: React.Dispatch<React.SetStateAction<tableItem[]>>;
+  isModalOpen: boolean;
+  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  selectedEmployee: tableItem | undefined;
+  setSelectedEmployee: React.Dispatch<React.SetStateAction<tableItem | undefined>>;
+  displayContent: React.ReactNode;
+  setDisplayContent: React.Dispatch<React.SetStateAction<React.ReactNode>>;
+  handleMenuChange: (key: string) => void;
+  selectedKey: string;
+  setSelectedKey: React.Dispatch<React.SetStateAction<string>>;
+}

@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
         ...employee,
       };
   
-      //RETURNING 
+      //RETURNING NEW EMPLOYEE
       return NextResponse.json({ message: "Employee Created Successfully!!", newEmployee });
     } catch (err: any) {
       return NextResponse.json({ error: "Something went wrong While Creating Employee! Try Again!" });
