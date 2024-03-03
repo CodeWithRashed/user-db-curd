@@ -2,38 +2,52 @@
 
 import toast from "react-hot-toast";
 import { useGlobalDataContext } from "../Context/GlobalDataContext";
+import { useState } from "react";
+import axios from "axios";
 
 const AddEmployee = () => {
   const { setData, data } = useGlobalDataContext();
-
-  console.log();
+  const [loading, setLoading] = useState(false);
 
   const handleAddEmployee = (event) => {
     event.preventDefault();
-    try {
-      const form = event.target;
-      const key = (data.length + 1).toString();
-      const name = form.name.value;
-      const email = form.email.value;
-      const phone = form.phone.value;
-      const isBlocked = false;
+    setLoading(true);
 
-      const employee = {
-        key,
-        name,
-        email,
-        phone,
-        isBlocked,
-      };
+    const form = event.target;
+    const key = (data.length + 1).toString();
+    const name = form.name.value;
+    const email = form.email.value;
+    const phone = form.phone.value;
+    const isBlocked = false;
 
-      const newData = [...data, employee];
-      setData(newData);
-      form.reset()
-      toast.success("Employee Added Successfully");
-    } catch (error) {
-      toast.error("Saved Unsuccessful!!");
-    }
+    const employee = {
+      key,
+      name,
+      email,
+      phone,
+      isBlocked,
+    };
+
+    axios
+      .post("/api/employee/add", employee)
+      .then((response) => {
+        if (response.status === 200) {
+          const newData = [...data, response?.data?.newEmployee];
+          setData(newData);
+          form.reset();
+          toast.success(response?.data?.message);
+        } else {
+          toast.error("Failed to add employee");
+        }
+      })
+      .catch((error) => {
+        toast.error("Saved Unsuccessful!!");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
+
 
   return (
     <div className="max-w-xs lg:w-96 bg-white mx-auto rounded-md my-auto">
@@ -93,7 +107,7 @@ const AddEmployee = () => {
             className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             type="submit"
           >
-            Add Employee
+            {loading ? <p>Adding...</p> : <p>Add Employee</p>}
           </button>
         </div>
       </form>

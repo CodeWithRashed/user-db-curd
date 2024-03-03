@@ -1,17 +1,26 @@
 "use client";
 
-import React, { Dispatch, SetStateAction, createContext, useContext, useEffect, useState } from "react";
+import React, {
+  Dispatch,
+  SetStateAction,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { tableItem } from "../interfaces/interfaces";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 interface DataContextValue {
   testData: string;
   data: tableItem[];
   isLoading: boolean;
   setData: Dispatch<SetStateAction<tableItem[]>>;
-  isModalOpen: boolean,
-  setIsModalOpen: Dispatch<SetStateAction<boolean>>
-  setSelectedEmployee: Dispatch<SetStateAction<tableItem>>
-  selectedEmployee: tableItem
+  isModalOpen: boolean;
+  setIsModalOpen: Dispatch<SetStateAction<boolean>>;
+  setSelectedEmployee: Dispatch<SetStateAction<tableItem>>;
+  selectedEmployee: tableItem;
 }
 
 interface DataContextProviderProps {
@@ -33,28 +42,25 @@ export const DataContextProvider = ({ children }: DataContextProviderProps) => {
   const [isLoading, setIsLoading] = React.useState(true);
   const [data, setData] = useState<tableItem[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedEmployee, setSelectedEmployee] = useState<tableItem>()
+  const [selectedEmployee, setSelectedEmployee] = useState<tableItem>();
 
   const fetchData = async () => {
-    const originData: tableItem[] = [];
-    for (let i = 0; i < 5; i++) {
-      originData.push({
-        key: i.toString(),
-        name: `Rashed${i}`,
-        email: `rashed@gmail${i}.com`,
-        phone: `${i}123456789`,
-        isBlocked: false,
-      });
-    }
-
-    setData(originData);
-    setIsLoading(false);
-    // try {
-    //     const response = await axios.get('your-api-endpoint');
-    //     setData(response.data);
-    // } catch (error) {
-    //     console.error('Error fetching data:', error);
-    // }
+    axios
+    .get("/api/employee/get")
+    .then((response) => {
+      if (response.status === 200) {
+        console.log("response.data",response?.data?.employees)
+        setData(response?.data?.employees);
+      } else {
+        toast.error("Error Getting Users");
+      }
+    })
+    .catch((error) => {
+      toast.error("Error Getting Users");
+    })
+    .finally(() => {
+      setIsLoading(false);
+    });
   };
 
   //GETTING DATA FROM DATABASE
@@ -62,8 +68,16 @@ export const DataContextProvider = ({ children }: DataContextProviderProps) => {
     fetchData();
   }, []);
 
-
-  const value = { testData, data, isLoading, setData, isModalOpen, setIsModalOpen, selectedEmployee, setSelectedEmployee};
+  const value = {
+    testData,
+    data,
+    isLoading,
+    setData,
+    isModalOpen,
+    setIsModalOpen,
+    selectedEmployee,
+    setSelectedEmployee,
+  };
 
   return (
     <GlobalDataContext.Provider value={value}>

@@ -4,6 +4,7 @@ export interface tableItem {
     email: string;
     phone: string;
     isBlocked: boolean;
+    _id: string;
   }
   
 
