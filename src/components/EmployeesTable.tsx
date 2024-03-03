@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import dynamic from "next/dynamic";
+export const dynamic = "force-dynamic";
 import { Form, Input, InputNumber, Popconfirm, Table, Typography } from "antd";
 
 import { EditableCellProps, tableItem } from "../interfaces/interfaces";

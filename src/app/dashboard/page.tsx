@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   description: 'Employee Management System App',
 }
 
+
 const DashboardPage = () => {
   return (
     <div>

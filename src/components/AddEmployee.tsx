@@ -1,5 +1,5 @@
 "use client";
-
+export const dynamic = "force-dynamic";
 import toast from "react-hot-toast";
 import { useGlobalDataContext } from "../Context/GlobalDataContext";
 import { useState } from "react";

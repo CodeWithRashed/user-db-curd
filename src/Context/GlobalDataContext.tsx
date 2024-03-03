@@ -1,34 +1,38 @@
-"use client";
-import React, { Dispatch, SetStateAction, createContext, useContext, useEffect, useState, ReactNode } from "react";
-import { tableItem } from "../interfaces/interfaces";
+"use client"
+import React, { createContext, useContext, useEffect, useState } from "react";
+export const dynamic = "force-dynamic";
+export const fetchCache = 'force-no-store'
 import axios from "axios";
 import toast from "react-hot-toast";
-export const dynamic = "force-dynamic";
+import { tableItem } from "../interfaces/interfaces";
 import EmployeeTable from "../components/EmployeesTable";
 import AddEmployee from "../components/AddEmployee";
 
+const headers = {
+  'Cache-Control': 'no-store'
+};
 
 interface DataContextValue {
   testData: string;
   data: tableItem[];
   isLoading: boolean;
-  setData: Dispatch<SetStateAction<tableItem[]>>;
+  setData: React.Dispatch<React.SetStateAction<tableItem[]>>;
   isModalOpen: boolean;
-  setIsModalOpen: Dispatch<SetStateAction<boolean>>;
-  setSelectedEmployee: Dispatch<SetStateAction<tableItem>>;
-  selectedEmployee: tableItem;
-  displayContent: ReactNode;
-  setDisplayContent: Dispatch<SetStateAction<ReactNode>>;
-  handleMenuChange: (key: string) => void; 
-  selectedKey: string
-  setSelectedKey: Dispatch<SetStateAction<string>>
+  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  selectedEmployee: tableItem | undefined;
+  setSelectedEmployee: React.Dispatch<React.SetStateAction<tableItem | undefined>>;
+  displayContent: React.ReactNode;
+  setDisplayContent: React.Dispatch<React.SetStateAction<React.ReactNode>>;
+  handleMenuChange: (key: string) => void;
+  selectedKey: string;
+  setSelectedKey: React.Dispatch<React.SetStateAction<string>>;
 }
 
 interface DataContextProviderProps {
   children: React.ReactNode;
 }
 
-export const GlobalDataContext = createContext<DataContextValue | null>(null);
+const GlobalDataContext = createContext<DataContextValue | null>(null);
 
 export const useGlobalDataContext = () => {
   const context = useContext(GlobalDataContext);
@@ -40,56 +44,53 @@ export const useGlobalDataContext = () => {
 
 export const DataContextProvider = ({ children }: DataContextProviderProps) => {
   const [testData, setTestData] = useState<string>("");
-  const [isLoading, setIsLoading] = React.useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState<tableItem[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState<tableItem>();
-  const [displayContent, setDisplayContent] = React.useState<ReactNode>(<EmployeeTable />);
-  const [selectedKey, setSelectedKey] = React.useState("1");
+  const [displayContent, setDisplayContent] = useState<React.ReactNode>(<EmployeeTable />);
+  const [selectedKey, setSelectedKey] = useState("1");
 
-  const handleMenuChange = (key) => {
+  const handleMenuChange = (key: string) => {
     switch (key) {
       case "1":
         console.log("key1");
         setSelectedKey("1")
-        setDisplayContent(<EmployeeTable/>);
-        return;
-  
+        setDisplayContent(<EmployeeTable />);
+        break;
+
       case "2":
         console.log("key2");
         setSelectedKey("2")
-        setDisplayContent(<AddEmployee/>);
-        return;
+        setDisplayContent(<AddEmployee />);
+        break;
+
       default:
         break;
     }
   };
-  
+
   const fetchData = async () => {
-    axios
-      .get("/api/employee/get")
-      .then((response) => {
-        if (response.status === 200) {
-          console.log("response.data", response?.data?.employees);
-          setData(response?.data?.employees);
-        } else {
-          toast.error("Error Getting Users");
-        }
-      })
-      .catch((error) => {
+    try {
+      const response = await axios.get("/api/employee/get", { headers });
+      if (response.status === 200) {
+        console.log("response.data", response?.data?.employees);
+        setData(response?.data?.employees);
+      } else {
         toast.error("Error Getting Users");
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+      }
+    } catch (error) {
+      toast.error("Error Getting Users");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  //GETTING DATA FROM DATABASE
-  React.useEffect(() => {
+  useEffect(() => {
     fetchData();
   }, []);
 
-  const value = {
+  const value: DataContextValue = {
     testData,
     data,
     isLoading,
@@ -101,8 +102,8 @@ export const DataContextProvider = ({ children }: DataContextProviderProps) => {
     displayContent,
     setDisplayContent,
     handleMenuChange,
-    setSelectedKey,
-    selectedKey
+    selectedKey,
+    setSelectedKey
   };
 
   return (

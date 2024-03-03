@@ -1,5 +1,4 @@
 // @ts-nocheck
-// @ts-nocheck
 import { MongoClient } from 'mongodb'
 
 const uri = process.env.DATABASE_URI

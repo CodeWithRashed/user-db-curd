@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+export const dynamic = "force-dynamic";
 import { UserOutlined, AppstoreAddOutlined } from "@ant-design/icons";
 import { Layout, Menu } from "antd";
 import { useGlobalDataContext } from "../Context/GlobalDataContext";

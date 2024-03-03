@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import clientPromise from "../../../../db/connectToDatabase";
+export const dynamic = "force-dynamic";
+
 
 export async function GET(request: NextRequest, response: NextResponse) {
   try {
