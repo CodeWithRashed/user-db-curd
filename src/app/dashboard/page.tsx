@@ -1,6 +1,7 @@
 export const dynamic = "force-dynamic";
-import AntLayout from "../../components/AntLayout"
+
 import type { Metadata } from 'next'
+import AntLayout from '../../components/AntLayout';
 
 export const metadata: Metadata = {
   title: 'Dashboard | Employee Management System',

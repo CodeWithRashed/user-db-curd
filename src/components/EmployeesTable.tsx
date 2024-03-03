@@ -1,13 +1,15 @@
 "use client";
 import React, { useState } from "react";
+import dynamic from "next/dynamic";
 import { Form, Input, InputNumber, Popconfirm, Table, Typography } from "antd";
-import EmptyEmployeeTable from "./EmptyEmployeeTable";
+
 import { EditableCellProps, tableItem } from "../interfaces/interfaces";
 import LoadingSpinner from "./LoadingSpinner";
 import toast from "react-hot-toast";
 import { useGlobalDataContext } from "../Context/GlobalDataContext";
 import DetailsModal from "./DetailsModal";
 import axios from "axios";
+import EmptyEmployeeTable from "./EmptyEmployeeTable";
 
 const EditableCell: React.FC<EditableCellProps> = ({
   editing,
@@ -63,7 +65,9 @@ const EmployeeTable: React.FC = () => {
   const save = async (record: tableItem) => {
     try {
       const row = (await form.validateFields()) as tableItem;
-      const updatedItemIndex = data.findIndex((item) => record.key === item.key);
+      const updatedItemIndex = data.findIndex(
+        (item) => record.key === item.key
+      );
       const newData = [...data];
       const index = newData.findIndex((item) => record.key === item.key);
       if (index > -1) {
@@ -73,11 +77,12 @@ const EmployeeTable: React.FC = () => {
           ...item,
           ...row,
         });
-         axios.put(`/api/employee/put/${record._id}`, row)
-        setData(newData);
-        console.log(newData[updatedItemIndex]);
-        setEditingKey("");
-        toast.success("Saved Successfully!!");
+        axios.put(`/api/employee/put/${record._id}`, row).then(() => {
+          setData(newData);
+          console.log(newData[updatedItemIndex]);
+          setEditingKey("");
+          toast.success("Saved Successfully!!");
+        });
       } else {
         newData.push(row);
         setData(newData);
@@ -100,16 +105,19 @@ const EmployeeTable: React.FC = () => {
 
     setData(newData);
     axios
-    .put(`/api/employee/put/${record._id}`, { isBlocked: !record.isBlocked })
-    toast.success("Employee Blocked Successfully!!");
+      .put(`/api/employee/put/${record._id}`, { isBlocked: !record.isBlocked })
+      .then(() => {
+        toast.success("Employee Blocked Successfully!!");
+      });
   };
 
   const handleDelete = (record: tableItem) => {
     const newData = data.filter((item) => item.key !== record.key);
     setData(newData);
-    axios
-    .delete(`/api/employee/delete/${record._id}`)
-    toast.success("Employee Deleted Successfully!!");
+
+    axios.delete(`/api/employee/delete/${record._id}`).then(() => {
+      toast.success("Employee Deleted Successfully!!");
+    });
   };
 
   const handleViewDetails = (record: tableItem) => {
@@ -236,24 +244,23 @@ const EmployeeTable: React.FC = () => {
     <div className="w-full h-full overflow-x-scroll">
       <DetailsModal />
       <div className="min-w-[500px]">
-      <Form form={form} component={false}>
-        <Table
-          components={{
-            body: {
-              cell: EditableCell,
-            },
-          }}
-          bordered
-          dataSource={data}
-          columns={mergedColumns}
-          rowClassName="editable-row"
-          pagination={{
-            onChange: cancel,
-          }}
-        />
-      </Form>
+        <Form form={form} component={false}>
+          <Table
+            components={{
+              body: {
+                cell: EditableCell,
+              },
+            }}
+            bordered
+            dataSource={data}
+            columns={mergedColumns}
+            rowClassName="editable-row"
+            pagination={{
+              onChange: cancel,
+            }}
+          />
+        </Form>
       </div>
-     
     </div>
   );
 };

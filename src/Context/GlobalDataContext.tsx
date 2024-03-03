@@ -3,8 +3,10 @@ import React, { Dispatch, SetStateAction, createContext, useContext, useEffect, 
 import { tableItem } from "../interfaces/interfaces";
 import axios from "axios";
 import toast from "react-hot-toast";
-import EmployeesTable from "../components/EmployeesTable";
+export const dynamic = "force-dynamic";
+import EmployeeTable from "../components/EmployeesTable";
 import AddEmployee from "../components/AddEmployee";
+
 
 interface DataContextValue {
   testData: string;
@@ -42,7 +44,7 @@ export const DataContextProvider = ({ children }: DataContextProviderProps) => {
   const [data, setData] = useState<tableItem[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState<tableItem>();
-  const [displayContent, setDisplayContent] = React.useState<ReactNode>(<EmployeesTable />);
+  const [displayContent, setDisplayContent] = React.useState<ReactNode>(<EmployeeTable />);
   const [selectedKey, setSelectedKey] = React.useState("1");
 
   const handleMenuChange = (key) => {
@@ -50,7 +52,7 @@ export const DataContextProvider = ({ children }: DataContextProviderProps) => {
       case "1":
         console.log("key1");
         setSelectedKey("1")
-        setDisplayContent(<EmployeesTable/>);
+        setDisplayContent(<EmployeeTable/>);
         return;
   
       case "2":

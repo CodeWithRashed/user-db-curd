@@ -1,5 +1,4 @@
 "use client";
-export const dynamic = "force-dynamic";
 import React from "react";
 import { UserOutlined, AppstoreAddOutlined } from "@ant-design/icons";
 import { Layout, Menu } from "antd";

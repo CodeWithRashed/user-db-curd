@@ -1,11 +1,8 @@
 // @ts-nocheck
+// @ts-nocheck
 import { MongoClient } from 'mongodb'
 
 const uri = process.env.DATABASE_URI
-const options = {
-  useUnifiedTopology: true,
-  useNewUrlParser: true,
-}
 
 let client = null
 let clientPromise = null
@@ -15,14 +12,13 @@ if (!process.env.DATABASE_URI) {
 }
 
 if (process.env.NODE_ENV === 'development') {
-
   if (!global._mongoClientPromise) {
-    client = new MongoClient(uri, options)
+    client = new MongoClient(uri)
     global._mongoClientPromise = client.connect()
   }
   clientPromise = global._mongoClientPromise
 } else {
-  client = new MongoClient(uri, options)
+  client = new MongoClient(uri)
   clientPromise = client.connect()
 }
 
