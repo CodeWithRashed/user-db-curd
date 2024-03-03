@@ -5,6 +5,7 @@ import EmptyEmployeeTable from "./EmptyEmployeeTable";
 import { EditableCellProps, tableItem } from "../interfaces/interfaces";
 import LoadingSpinner from "./LoadingSpinner";
 import toast from "react-hot-toast";
+import { useGlobalDataContext } from "../Context/GlobalDataContext";
 
 const EditableCell: React.FC<EditableCellProps> = ({
   editing,
@@ -41,38 +42,13 @@ const EditableCell: React.FC<EditableCellProps> = ({
 };
 
 const EmployeeTable: React.FC = () => {
+  const {data, setData, isLoading} = useGlobalDataContext()
+
   const [form] = Form.useForm();
-  const [data, setData] = useState([]);
   const [editingKey, setEditingKey] = useState("");
-  const [isLoading, setIsLoading] = React.useState(true);
 
-  const fetchData = async () => {
-    const originData: tableItem[] = [];
-    for (let i = 0; i < 5; i++) {
-      originData.push({
-        key: i.toString(),
-        name: `Rashed${i}`,
-        email: `rashed@gmail${i}.com`,
-        phone: `${i}123456789`,
-        isBlocked: false,
-      });
-    }
 
-    setData(originData);
-    setIsLoading(false);
-    // try {
-    //     const response = await axios.get('your-api-endpoint');
-    //     setData(response.data);
-    // } catch (error) {
-    //     console.error('Error fetching data:', error);
-    // }
-  };
-
-  //GETTING DATA FROM DATABASE
-  React.useEffect(() => {
-    fetchData();
-  }, []);
-
+ 
   const isEditing = (record: tableItem) => record.key === editingKey;
 
   const edit = (record: Partial<tableItem> & { key: React.Key }) => {

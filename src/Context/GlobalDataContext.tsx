@@ -1,9 +1,13 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, createContext, useContext, useEffect, useState } from "react";
+import { tableItem } from "../interfaces/interfaces";
 
 interface DataContextValue {
   testData: string;
+  data: tableItem[];
+  isLoading: boolean;
+  setData: Dispatch<SetStateAction<tableItem[]>>;
 }
 
 interface DataContextProviderProps {
@@ -22,11 +26,39 @@ export const useGlobalDataContext = () => {
 
 export const DataContextProvider = ({ children }: DataContextProviderProps) => {
   const [testData, setTestData] = useState<string>("");
-  useEffect(() => {
-    setTestData("Hello ");
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [data, setData] = useState<tableItem[]>([]);
+
+
+  const fetchData = async () => {
+    const originData: tableItem[] = [];
+    for (let i = 0; i < 5; i++) {
+      originData.push({
+        key: i.toString(),
+        name: `Rashed${i}`,
+        email: `rashed@gmail${i}.com`,
+        phone: `${i}123456789`,
+        isBlocked: false,
+      });
+    }
+
+    setData(originData);
+    setIsLoading(false);
+    // try {
+    //     const response = await axios.get('your-api-endpoint');
+    //     setData(response.data);
+    // } catch (error) {
+    //     console.error('Error fetching data:', error);
+    // }
+  };
+
+  //GETTING DATA FROM DATABASE
+  React.useEffect(() => {
+    fetchData();
   }, []);
 
-  const value = { testData };
+
+  const value = { testData, data, isLoading, setData};
 
   return (
     <GlobalDataContext.Provider value={value}>
