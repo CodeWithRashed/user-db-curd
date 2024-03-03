@@ -1,14 +1,46 @@
-"use client"
+"use client";
 
+import toast from "react-hot-toast";
 import { useGlobalDataContext } from "../Context/GlobalDataContext";
 
-
 const AddEmployee = () => {
-  const {testData} = useGlobalDataContext()
-  console.log(testData)
+  const { setData, data } = useGlobalDataContext();
+
+  console.log();
+
+  const handleAddEmployee = (event) => {
+    event.preventDefault();
+    try {
+      const form = event.target;
+      const key = (data.length + 1).toString();
+      const name = form.name.value;
+      const email = form.email.value;
+      const phone = form.phone.value;
+      const isBlocked = false;
+
+      const employee = {
+        key,
+        name,
+        email,
+        phone,
+        isBlocked,
+      };
+
+      const newData = [...data, employee];
+      setData(newData);
+      form.reset()
+      toast.success("Employee Added Successfully");
+    } catch (error) {
+      toast.error("Saved Unsuccessful!!");
+    }
+  };
+
   return (
     <div className="max-w-xs lg:w-96 bg-white mx-auto rounded-md my-auto">
-      <form className="shadow-md rounded p-4 md:p-8 lg:p-14">
+      <form
+        onSubmit={handleAddEmployee}
+        className="shadow-md rounded p-4 md:p-8 lg:p-14"
+      >
         <div className="mb-4">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
@@ -59,7 +91,7 @@ const AddEmployee = () => {
         <div className="flex items-center justify-between">
           <button
             className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            type="button"
+            type="submit"
           >
             Add Employee
           </button>
