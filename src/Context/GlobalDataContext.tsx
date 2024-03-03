@@ -1,16 +1,10 @@
 "use client";
-
-import React, {
-  Dispatch,
-  SetStateAction,
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import React, { Dispatch, SetStateAction, createContext, useContext, useEffect, useState, ReactNode } from "react";
 import { tableItem } from "../interfaces/interfaces";
 import axios from "axios";
 import toast from "react-hot-toast";
+import EmployeesTable from "../components/EmployeesTable";
+import AddEmployee from "../components/AddEmployee";
 
 interface DataContextValue {
   testData: string;
@@ -21,6 +15,11 @@ interface DataContextValue {
   setIsModalOpen: Dispatch<SetStateAction<boolean>>;
   setSelectedEmployee: Dispatch<SetStateAction<tableItem>>;
   selectedEmployee: tableItem;
+  displayContent: ReactNode;
+  setDisplayContent: Dispatch<SetStateAction<ReactNode>>;
+  handleMenuChange: (key: string) => void; 
+  selectedKey: string
+  setSelectedKey: Dispatch<SetStateAction<string>>
 }
 
 interface DataContextProviderProps {
@@ -43,24 +42,44 @@ export const DataContextProvider = ({ children }: DataContextProviderProps) => {
   const [data, setData] = useState<tableItem[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState<tableItem>();
+  const [displayContent, setDisplayContent] = React.useState<ReactNode>(<EmployeesTable />);
+  const [selectedKey, setSelectedKey] = React.useState("1");
 
+  const handleMenuChange = (key) => {
+    switch (key) {
+      case "1":
+        console.log("key1");
+        setSelectedKey("1")
+        setDisplayContent(<EmployeesTable/>);
+        return;
+  
+      case "2":
+        console.log("key2");
+        setSelectedKey("2")
+        setDisplayContent(<AddEmployee/>);
+        return;
+      default:
+        break;
+    }
+  };
+  
   const fetchData = async () => {
     axios
-    .get("/api/employee/get")
-    .then((response) => {
-      if (response.status === 200) {
-        console.log("response.data",response?.data?.employees)
-        setData(response?.data?.employees);
-      } else {
+      .get("/api/employee/get")
+      .then((response) => {
+        if (response.status === 200) {
+          console.log("response.data", response?.data?.employees);
+          setData(response?.data?.employees);
+        } else {
+          toast.error("Error Getting Users");
+        }
+      })
+      .catch((error) => {
         toast.error("Error Getting Users");
-      }
-    })
-    .catch((error) => {
-      toast.error("Error Getting Users");
-    })
-    .finally(() => {
-      setIsLoading(false);
-    });
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   //GETTING DATA FROM DATABASE
@@ -77,6 +96,11 @@ export const DataContextProvider = ({ children }: DataContextProviderProps) => {
     setIsModalOpen,
     selectedEmployee,
     setSelectedEmployee,
+    displayContent,
+    setDisplayContent,
+    handleMenuChange,
+    setSelectedKey,
+    selectedKey
   };
 
   return (

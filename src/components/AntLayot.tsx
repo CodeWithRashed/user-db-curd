@@ -4,9 +4,8 @@ import {
   UserOutlined,
   AppstoreAddOutlined
 } from "@ant-design/icons";
-import { Layout, Menu, theme } from "antd";
-import AddEmployee from "./AddEmployee";
-import EmployeesTable from "./EmployeesTable";
+import { Layout, Menu } from "antd";
+import { useGlobalDataContext } from "../Context/GlobalDataContext";
 
 const { Content, Footer, Sider } = Layout;
 
@@ -19,27 +18,9 @@ const items = [
   label: item.label
 }));
 
+
 const AntLayout: React.FC = () => {
-
-
-  const [displayContent, setDisplayContent] = React.useState(<EmployeesTable/>);
-
-  const handleMenuChange = (key) => {
-    switch (key) {
-      case "1":
-        console.log("key1");
-        setDisplayContent(<EmployeesTable/>);
-        return;
-
-      case "2":
-        console.log("key2");
-        setDisplayContent(<AddEmployee/>);
-        return;
-      default:
-        break;
-    }
-  };
-
+  const {displayContent, handleMenuChange, selectedKey} = useGlobalDataContext()
   return (
     <Layout style={{ height: "100vh" }}>
       <Sider
@@ -57,6 +38,7 @@ const AntLayout: React.FC = () => {
           theme="dark"
           mode="inline"
           defaultSelectedKeys={["1"]}
+          selectedKeys={[selectedKey]}
           items={items}
           onClick={(e) => handleMenuChange(e.key)}
         />
