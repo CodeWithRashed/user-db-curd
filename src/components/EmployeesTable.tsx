@@ -7,6 +7,7 @@ import LoadingSpinner from "./LoadingSpinner";
 import toast from "react-hot-toast";
 import { useGlobalDataContext } from "../Context/GlobalDataContext";
 import DetailsModal from "./DetailsModal";
+import axios from "axios";
 
 const EditableCell: React.FC<EditableCellProps> = ({
   editing,
@@ -59,12 +60,12 @@ const EmployeeTable: React.FC = () => {
     setEditingKey("");
   };
 
-  const save = async (key: React.Key) => {
+  const save = async (record: tableItem) => {
     try {
       const row = (await form.validateFields()) as tableItem;
-      const updatedItemIndex = data.findIndex((item) => key === item.key);
+      const updatedItemIndex = data.findIndex((item) => record.key === item.key);
       const newData = [...data];
-      const index = newData.findIndex((item) => key === item.key);
+      const index = newData.findIndex((item) => record.key === item.key);
       if (index > -1) {
         const item = newData[index];
 
@@ -72,6 +73,7 @@ const EmployeeTable: React.FC = () => {
           ...item,
           ...row,
         });
+         axios.put(`/api/employee/put/${record._id}`, row)
         setData(newData);
         console.log(newData[updatedItemIndex]);
         setEditingKey("");
@@ -86,9 +88,9 @@ const EmployeeTable: React.FC = () => {
     }
   };
 
-  const handleBlock = (key: React.Key) => {
+  const handleBlock = (record: tableItem) => {
     const newData = data.map((item) => {
-      if (item.key === key) {
+      if (item.key === record.key) {
         console.log("blocked item", item);
         return { ...item, isBlocked: !item.isBlocked };
       }
@@ -100,8 +102,8 @@ const EmployeeTable: React.FC = () => {
     toast.success("Employee Blocked Successfully!!");
   };
 
-  const handleDelete = (key: React.Key) => {
-    const newData = data.filter((item) => item.key !== key);
+  const handleDelete = (record: tableItem) => {
+    const newData = data.filter((item) => item.key !== record.key);
     setData(newData);
     toast.success("Employee Deleted Successfully!!");
   };
@@ -131,7 +133,7 @@ const EmployeeTable: React.FC = () => {
         return editable ? (
           <span>
             <Typography.Link
-              onClick={() => save(record.key)}
+              onClick={() => save(record)}
               style={{ marginRight: 8 }}
             >
               Save
@@ -161,7 +163,7 @@ const EmployeeTable: React.FC = () => {
             <span className="block-button ml-3">
               <Popconfirm
                 title={`Sure to ${record.isBlocked ? "Unblock" : "Block"}?`}
-                onConfirm={() => handleBlock(record.key)}
+                onConfirm={() => handleBlock(record)}
                 okText="Yes"
                 cancelText="No"
               >
@@ -173,7 +175,7 @@ const EmployeeTable: React.FC = () => {
             <span className="delete-button ml-3">
               <Popconfirm
                 title="Sure to delete?"
-                onConfirm={() => handleDelete(record.key)}
+                onConfirm={() => handleDelete(record)}
                 okText="Yes"
                 cancelText="No"
               >
