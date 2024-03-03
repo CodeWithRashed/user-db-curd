@@ -99,6 +99,8 @@ const EmployeeTable: React.FC = () => {
     });
 
     setData(newData);
+    axios
+    .put(`/api/employee/put/${record._id}`, { isBlocked: !record.isBlocked })
     toast.success("Employee Blocked Successfully!!");
   };
 
