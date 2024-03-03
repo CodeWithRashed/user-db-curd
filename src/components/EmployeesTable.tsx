@@ -6,6 +6,7 @@ import { EditableCellProps, tableItem } from "../interfaces/interfaces";
 import LoadingSpinner from "./LoadingSpinner";
 import toast from "react-hot-toast";
 import { useGlobalDataContext } from "../Context/GlobalDataContext";
+import DetailsModal from "./DetailsModal";
 
 const EditableCell: React.FC<EditableCellProps> = ({
   editing,
@@ -42,13 +43,11 @@ const EditableCell: React.FC<EditableCellProps> = ({
 };
 
 const EmployeeTable: React.FC = () => {
-  const {data, setData, isLoading} = useGlobalDataContext()
-
+  const { data, setData, isLoading, setIsModalOpen, setSelectedEmployee } =
+    useGlobalDataContext();
   const [form] = Form.useForm();
   const [editingKey, setEditingKey] = useState("");
 
-
- 
   const isEditing = (record: tableItem) => record.key === editingKey;
 
   const edit = (record: Partial<tableItem> & { key: React.Key }) => {
@@ -107,28 +106,25 @@ const EmployeeTable: React.FC = () => {
     toast.success("Employee Deleted Successfully!!");
   };
 
+  const handleViewDetails = (record: tableItem) => {
+    setSelectedEmployee(record);
+    setIsModalOpen(true);
+  };
   const columns = [
     {
-      title: "name",
+      title: "Name",
       dataIndex: "name",
-      width: "25%",
+      width: "30%",
       editable: true,
     },
     {
-      title: "email",
+      title: "Email",
       dataIndex: "email",
       width: "30%",
       editable: false,
     },
     {
-      title: "phone",
-      dataIndex: "phone",
-      width: "25%",
-      editable: true,
-    },
-    
-    {
-      title: "operation",
+      title: "Actions",
       dataIndex: "operation",
       render: (_: any, record: tableItem) => {
         const editable = isEditing(record);
@@ -146,6 +142,14 @@ const EmployeeTable: React.FC = () => {
           </span>
         ) : (
           <div>
+            <span className="view-button mr-3">
+              <Typography.Link
+                onClick={() => handleViewDetails(record)}
+                disabled={editingKey !== ""}
+              >
+                Details
+              </Typography.Link>
+            </span>
             <span className="edit-button">
               <Typography.Link
                 disabled={editingKey !== ""}
@@ -156,13 +160,13 @@ const EmployeeTable: React.FC = () => {
             </span>
             <span className="block-button ml-3">
               <Popconfirm
-                title={`Sure to ${record.isBlocked ? "unblock" : "block"}?`}
+                title={`Sure to ${record.isBlocked ? "Unblock" : "Block"}?`}
                 onConfirm={() => handleBlock(record.key)}
                 okText="Yes"
                 cancelText="No"
               >
                 <Typography.Link disabled={editingKey !== ""}>
-                  {record.isBlocked ? "unblock" : "block"}
+                  {record.isBlocked ? "Unblock" : "Block"}
                 </Typography.Link>
               </Popconfirm>
             </span>
@@ -217,6 +221,7 @@ const EmployeeTable: React.FC = () => {
 
   return (
     <div className="w-full h-full">
+      <DetailsModal />
       <Form form={form} component={false}>
         <Table
           components={{

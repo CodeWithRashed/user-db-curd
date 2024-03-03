@@ -8,6 +8,10 @@ interface DataContextValue {
   data: tableItem[];
   isLoading: boolean;
   setData: Dispatch<SetStateAction<tableItem[]>>;
+  isModalOpen: boolean,
+  setIsModalOpen: Dispatch<SetStateAction<boolean>>
+  setSelectedEmployee: Dispatch<SetStateAction<tableItem>>
+  selectedEmployee: tableItem
 }
 
 interface DataContextProviderProps {
@@ -28,7 +32,8 @@ export const DataContextProvider = ({ children }: DataContextProviderProps) => {
   const [testData, setTestData] = useState<string>("");
   const [isLoading, setIsLoading] = React.useState(true);
   const [data, setData] = useState<tableItem[]>([]);
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedEmployee, setSelectedEmployee] = useState<tableItem>()
 
   const fetchData = async () => {
     const originData: tableItem[] = [];
@@ -58,7 +63,7 @@ export const DataContextProvider = ({ children }: DataContextProviderProps) => {
   }, []);
 
 
-  const value = { testData, data, isLoading, setData};
+  const value = { testData, data, isLoading, setData, isModalOpen, setIsModalOpen, selectedEmployee, setSelectedEmployee};
 
   return (
     <GlobalDataContext.Provider value={value}>
