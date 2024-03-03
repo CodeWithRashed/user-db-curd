@@ -73,6 +73,8 @@ const AddEmployee = () => {
             name="name"
             type="text"
             placeholder="Enter Employee Name"
+            required={true}
+            aria-required="true"
           />
         </div>
 
@@ -88,6 +90,8 @@ const AddEmployee = () => {
             id="email"
             type="email"
             name="email"
+            required={true}
+            aria-required="true"
             placeholder="Enter Employee Email"
           />
         </div>
@@ -105,6 +109,8 @@ const AddEmployee = () => {
             type="text"
             name="phone"
             placeholder="Enter Employee Phone"
+            required={true}
+            aria-required="true"
           />
         </div>
         <div className="flex items-center justify-between">
