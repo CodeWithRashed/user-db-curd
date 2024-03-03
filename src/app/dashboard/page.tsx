@@ -1,4 +1,4 @@
-import AntLayout from "../../components/AntLayot"
+import AntLayout from "../../components/AntLayout"
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {

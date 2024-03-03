@@ -1,9 +1,6 @@
 "use client";
 import React from "react";
-import {
-  UserOutlined,
-  AppstoreAddOutlined
-} from "@ant-design/icons";
+import { UserOutlined, AppstoreAddOutlined } from "@ant-design/icons";
 import { Layout, Menu } from "antd";
 import { useGlobalDataContext } from "../Context/GlobalDataContext";
 
@@ -11,16 +8,16 @@ const { Content, Footer, Sider } = Layout;
 
 const items = [
   { icon: AppstoreAddOutlined, label: "Dashboard" },
-  { icon: UserOutlined, label: "Add Employee" }
+  { icon: UserOutlined, label: "Add Employee" },
 ].map((item, index) => ({
   key: String(index + 1),
   icon: React.createElement(item.icon),
-  label: item.label
+  label: item.label,
 }));
 
-
 const AntLayout: React.FC = () => {
-  const {displayContent, handleMenuChange, selectedKey} = useGlobalDataContext()
+  const { displayContent, handleMenuChange, selectedKey } =
+    useGlobalDataContext();
   return (
     <Layout style={{ height: "100vh" }}>
       <Sider
@@ -33,7 +30,7 @@ const AntLayout: React.FC = () => {
           console.log(collapsed, type);
         }}
       >
-      <div className="p-5 text-white">Logo</div>
+        <div className="p-5 text-white">Logo</div>
         <Menu
           theme="dark"
           mode="inline"
@@ -44,7 +41,7 @@ const AntLayout: React.FC = () => {
         />
       </Sider>
       <Layout>
-        <Content style={{ margin: "24px 16px 0", background: "transparent"}}>
+        <Content style={{ margin: "24px 16px 0", background: "transparent" }}>
           <div
             style={{
               padding: 4,

@@ -120,7 +120,13 @@ const EmployeeTable: React.FC = () => {
     {
       title: "Name",
       dataIndex: "name",
-      width: "30%",
+      width: "20%",
+      editable: true,
+    },
+    {
+      title: "Phone",
+      dataIndex: "phone",
+      width: "20%",
       editable: true,
     },
     {
@@ -132,6 +138,7 @@ const EmployeeTable: React.FC = () => {
     {
       title: "Actions",
       dataIndex: "operation",
+      width: "30%",
       render: (_: any, record: tableItem) => {
         const editable = isEditing(record);
         return editable ? (
@@ -202,7 +209,7 @@ const EmployeeTable: React.FC = () => {
       ...col,
       onCell: (record: tableItem) => ({
         record,
-        inputType: col.dataIndex === "age" ? "number" : "text",
+        inputType: col.dataIndex === "phone" ? "number" : "text",
         dataIndex: col.dataIndex,
         title: col.title,
         editing: isEditing(record),
@@ -226,8 +233,9 @@ const EmployeeTable: React.FC = () => {
   }
 
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-full overflow-x-scroll">
       <DetailsModal />
+      <div className="min-w-[500px]">
       <Form form={form} component={false}>
         <Table
           components={{
@@ -244,6 +252,8 @@ const EmployeeTable: React.FC = () => {
           }}
         />
       </Form>
+      </div>
+     
     </div>
   );
 };
