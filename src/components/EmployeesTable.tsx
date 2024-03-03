@@ -107,6 +107,8 @@ const EmployeeTable: React.FC = () => {
   const handleDelete = (record: tableItem) => {
     const newData = data.filter((item) => item.key !== record.key);
     setData(newData);
+    axios
+    .delete(`/api/employee/delete/${record._id}`)
     toast.success("Employee Deleted Successfully!!");
   };
 
@@ -215,7 +217,7 @@ const EmployeeTable: React.FC = () => {
       </div>
     );
   }
-  if (!data) {
+  if (!data.length) {
     return (
       <div className="flex justify-center items-center h-full w-full my-auto">
         <EmptyEmployeeTable />
